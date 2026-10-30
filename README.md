@@ -1,3 +1,5 @@
+![Banner](banner.png)
+
 # dm-data-format-obfuscator
 Transforms data into a visually similar but structurally different format to prevent direct interpretation. For example, converting JSON to XML with scrambled field names, or changing date formats unpredictably. - Focused on Tools designed to generate or mask sensitive data with realistic-looking but meaningless values
 
