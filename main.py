@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom
 import logging
 import random
+import sys
 from faker import Faker
 import datetime
 import os
@@ -49,8 +50,9 @@ class DataFormatObfuscator:
                 if self.input_file.lower().endswith('.json'):
                     return json.load(f)
                 elif self.input_file.lower().endswith('.xml'):
-                    # Parse XML directly.  The obfuscation logic can handle it.
-                    return ET.parse(f)
+                    # ET.parse needs a binary stream or a path; a text-mode
+                    # handle makes expat fail on the encoding declaration.
+                    return ET.parse(self.input_file)
                 else:
                     raise ValueError("Unsupported file type. Only JSON and XML are supported.")
         except FileNotFoundError:
@@ -128,6 +130,15 @@ class DataFormatObfuscator:
             any: The obfuscated data.
         """
         try:
+            if isinstance(data, ET.ElementTree):
+                # XML input: the dates live in element text, so walk the
+                # tree and rewrite each text node in place. Returning the
+                # tree untouched (the old fall-through) made save_data write
+                # the ElementTree repr string into the output file.
+                for elem in data.getroot().iter():
+                    if elem.text and elem.text.strip():
+                        elem.text = self.transform_date_format(elem.text)
+                return data
             if isinstance(data, dict):
                 return {k: self.transform_date_format(v) for k, v in data.items()}
             elif isinstance(data, list):
@@ -155,6 +166,8 @@ class DataFormatObfuscator:
             data = self.load_data()
 
             if self.transformation_type == 'json_to_xml':
+                if isinstance(data, ET.ElementTree):
+                    raise ValueError("json_to_xml needs JSON input; the input file is already XML.")
                 transformed_data = self.transform_json_to_xml(data)
             elif self.transformation_type == 'date_obfuscation':
                 transformed_data = self.transform_date_format(data)
@@ -179,11 +192,12 @@ class DataFormatObfuscator:
                 if self.transformation_type == 'json_to_xml':
                     f.write(data)
                 elif self.transformation_type == 'date_obfuscation':
-                    # For date obfuscation, try to dump back to JSON if the original was JSON.  Otherwise, just write the string.
-                    if self.input_file.lower().endswith('.json'):
+                    if isinstance(data, ET.ElementTree):
+                        data.write(f, encoding='unicode', xml_declaration=True)
+                    elif self.input_file.lower().endswith('.json'):
                         json.dump(data, f, indent=4)
                     else:
-                        f.write(str(data))  # Handle cases where the input wasn't JSON.
+                        f.write(str(data))
                 else:
                     f.write(str(data))
             logging.info(f"Data saved to {self.output_file}")
@@ -224,10 +238,13 @@ def main():
 
     except FileNotFoundError as e:
         logging.error(e)
+        sys.exit(1)
     except ValueError as e:
         logging.error(e)
+        sys.exit(1)
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
