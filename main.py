@@ -8,12 +8,16 @@ import sys
 from faker import Faker
 import datetime
 import os
+from pathlib import Path
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize Faker
 fake = Faker()
+
+class NoDatesRewrittenError(Exception):
+    """Raised when a date_obfuscation run rewrites no date at all."""
 
 class DataFormatObfuscator:
     """
@@ -33,6 +37,7 @@ class DataFormatObfuscator:
         self.input_file = input_file
         self.output_file = output_file
         self.transformation_type = transformation_type
+        self.dates_rewritten = 0
 
     def load_data(self):
         """
@@ -148,6 +153,7 @@ class DataFormatObfuscator:
                 try:
                     date_obj = datetime.datetime.strptime(data, '%Y-%m-%d') # Common format - adjust as needed.
                     new_format = random.choice(['%m/%d/%Y', '%d.%m.%Y', '%Y/%m/%d', '%d-%b-%Y'])
+                    self.dates_rewritten += 1
                     return date_obj.strftime(new_format)
                 except ValueError:
                     # Not a recognizable date, return the original string
@@ -171,11 +177,17 @@ class DataFormatObfuscator:
                 transformed_data = self.transform_json_to_xml(data)
             elif self.transformation_type == 'date_obfuscation':
                 transformed_data = self.transform_date_format(data)
+                if self.dates_rewritten == 0:
+                    # Nothing was rewritten, so this run must not report
+                    # completion and must not write an output file.
+                    raise NoDatesRewrittenError("No dates were found or rewritten.")
             else:
                 raise ValueError(f"Unsupported transformation type: {self.transformation_type}")
 
             self.save_data(transformed_data)
 
+        except NoDatesRewrittenError:
+            raise
         except Exception as e:
             logging.error(f"Data processing failed: {e}")
             raise
@@ -231,11 +243,21 @@ def main():
         if not os.path.exists(args.input_file):
             raise FileNotFoundError(f"The input file '{args.input_file}' does not exist.")
 
+        # The output may not name the input file, in any spelling.
+        # Resolved paths are compared, so a symlink alias is caught as
+        # well as the same string. Refuse before any write.
+        if Path(args.output_file).resolve() == Path(args.input_file).resolve():
+            logging.error("Output file must not be the input file. Choose a different output path.")
+            sys.exit(1)
+
         obfuscator = DataFormatObfuscator(args.input_file, args.output_file, args.transformation_type)
         obfuscator.process_data()
 
         logging.info("Data obfuscation completed successfully.")
 
+    except NoDatesRewrittenError as e:
+        print(str(e))
+        sys.exit(1)
     except FileNotFoundError as e:
         logging.error(e)
         sys.exit(1)
