@@ -102,6 +102,13 @@ class DataFormatObfuscator:
         """
         if isinstance(data, dict):
             for key, value in data.items():
+                # Each key gets a fresh random word, drawn from the
+                # module level Faker with no seed, so the same input
+                # produces different element names on every run, two
+                # keys can draw the same word, and nothing records the
+                # mapping. The conversion cannot be reversed, and list
+                # items below get random names too, so even the
+                # difference between a field and a list entry is lost.
                 obfuscated_key = fake.word()  # Generate a random word for the new key
                 element = ET.SubElement(parent, obfuscated_key)
                 self._json_to_xml_recursive(value, element)
@@ -141,6 +148,9 @@ class DataFormatObfuscator:
                 # tree untouched (the old fall-through) made save_data write
                 # the ElementTree repr string into the output file.
                 for elem in data.getroot().iter():
+                    # Element text only: a date sitting in an attribute
+                    # value, or in a tail after a child element, is
+                    # never visited and keeps its original format.
                     if elem.text and elem.text.strip():
                         elem.text = self.transform_date_format(elem.text)
                 return data
@@ -151,6 +161,10 @@ class DataFormatObfuscator:
             elif isinstance(data, str):
                 # Attempt to parse as date and reformat
                 try:
+                    # Only the one ISO shape is recognised, and the
+                    # target format is drawn again for every value, so
+                    # a column of dates that all started in one format
+                    # comes out in a mixture of four formats.
                     date_obj = datetime.datetime.strptime(data, '%Y-%m-%d') # Common format - adjust as needed.
                     new_format = random.choice(['%m/%d/%Y', '%d.%m.%Y', '%Y/%m/%d', '%d-%b-%Y'])
                     self.dates_rewritten += 1
