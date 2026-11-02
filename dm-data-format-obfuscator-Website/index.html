@@ -1,166 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dm Data Format Obfuscator: what it is, how it runs, where it stops</title>
-<meta name="description" content="Dm Data Format Obfuscator is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.">
-<style>
-:root {
-  --bg: #0a120e; --panel: #101c16; --ink: #e6f0e2;
-  --mut: #15251d;
-  --acc: #a8e05c; --acc2: #f0be54;
-  --line: #101c16;
-}
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink);
-  font-family: 'Trebuchet MS', sans-serif; line-height: 1.55; }
-code, pre, .mono { font-family: 'Courier New', monospace; }
-a { color: var(--acc2); }
-.hero { padding: 3rem 6vw 1rem; }
-.hero img.banner { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; }
-.logo { width: 92px; height: 92px; border-radius: 18px;
-  border: 1px solid var(--line); }
-h1 { font-size: 2.4rem; margin: 0.4em 0 0.1em; }
-h2 { border-bottom: 2px solid var(--acc); padding-bottom: 0.2em;
-  margin-top: 2em; }
-.lede { font-size: 1.15rem; max-width: 62ch; }
-main { padding: 0 6vw 3rem; max-width: 1180px; margin: 0 auto; }
-.grid { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.card { background: var(--panel); border: 1px solid var(--line);
-  border-radius: 12px; padding: 1rem 1.2rem; }
-.card.pop { animation: rise 0.7s ease both; }
-@keyframes rise { from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; } }
-pre.code { background: #101014; color: #e8e6df; padding: 1rem 1.2rem;
-  border-radius: 12px; overflow-x: auto; font-size: 0.86rem;
-  border-left: 5px solid var(--acc); }
-table { border-collapse: collapse; width: 100%; }
-td, th { border-bottom: 1px solid var(--line); padding: 0.45rem 0.6rem;
-  text-align: left; }
-.shots { display: grid; gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.shots img { width: 100%; height: auto; border: 1px solid var(--line);
-  border-radius: 10px; background: #f4f1e8; }
-footer { padding: 2rem 6vw; border-top: 1px solid var(--line);
-  color: var(--mut); }
-.rail { display: flex; gap: 1.2rem; align-items: flex-start; }
-.rail nav { position: sticky; top: 1rem; min-width: 180px; }
-@media (max-width: 760px) { .rail { flex-direction: column; }
-  .rail nav { position: static; } }
-@media (prefers-reduced-motion: reduce) {
-  .card.pop { animation: none; } * { scroll-behavior: auto; } }
-</style>
-</head>
-<body class="layout-note">
-<!-- This page exists for dm-data-format-obfuscator alone: the layout (notebook),
-     the colors, and the type were picked for this project, not
-     shared with the other project pages. The code block below is
-     copied from the file it names, line for line. If it looks
-     plain, that is because the project is plain, and I would
-     rather the page match the project than dress it up. The one
-     thing I will not do here is oversell: what this project does
-     not do is stated on the page, not hidden from it. -->
-<header class="hero">
-  <img class="logo" src="assets/logo.png" alt="Dm Data Format Obfuscator logo">
-  <img class="banner" src="assets/banner.png" alt="">
-  <h1>Dm Data Format Obfuscator</h1>
-  <p class="mono"><a href="https://github.com/ShadowGuard-AI/dm-data-format-obfuscator">github.com/ShadowGuard-AI/dm-data-format-obfuscator</a></p>
-</header>
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><title>dm-data-format-obfuscator: Interlibrary Loan Padded Envelope</title>
+<style>@font-face{font-family:Disp;src:url("fonts/CaacupeOne.ttf")}@font-face{font-family:Text;src:url("fonts/Barlow.ttf")}
+body{background:#a8a6a0;font-family:Text,sans-serif;color:#2a2826;margin:0}main{max-width:920px;margin:0 auto;padding:28px}
+h1,h2,h3{font-family:Disp,serif;color:#1c1a18}section{background:#c4c2bc;padding:18px 22px 26px;margin:16px 0;border-bottom:10px solid #a88a60;position:relative}
+.num{color:#b23428;font-family:Disp,serif}img{max-width:100%}
+button{background:#a8a6a0;color:#1c1a18;border:3px double #1c1a18;padding:12px 20px;margin:4px;font-family:Disp,serif;text-align:center}
+button:hover{color:#000}button:active{transform:translateY(2px)}button:focus{outline:3px solid #b23428;outline-offset:3px;border-radius:50%}
+a::before{content:"◎ ";color:#1c1a18}a:hover::before{color:#b23428}
+.card{background:#c9c7c1;padding:12px 16px;margin:10px 0;background-image:repeating-linear-gradient(#c9c7c1,#c9c7c1 26px,#bdbbb5 27px)}
+pre{white-space:pre-wrap;font-family:Text,sans-serif;background:#d2d0ca;padding:14px}code{font-family:Text,sans-serif}
+.smallred{color:#b23428;font-size:14px}.big{font-size:21px}</style></head><body><main>
+<img src="intro-banner.png" alt="Introduction banner: the open padded envelope, the blank stepped tray, the postmarked stack and the catalogue drawers, no name anywhere">
+<h1>dm-data-format-obfuscator: Interlibrary Loan Padded Envelope</h1>
+<p>dm-data-format-obfuscator: Interlibrary Loan Padded Envelope names itself in that form throughout this page. The page is laid out as a sorting table read from the near end to the far end. Ground in newsprint grey. Panels in a paler grey. Headings in Caacupe One in ink black. Body text in Barlow in ink black softened one step. Kraft forms the table edge strip along the foot of each panel. Red pencil marks panel numbers only.</p>
+<img src="logo.png" alt="Logo: one grey padded envelope, flap closed, with a blank Dewey label, a ringed postmark and one red pencil tick"><img src="banner.png" alt="Wordmark banner: the library back room, the name in red pencil on the Dewey label of the waiting envelope">
+<img src="scene.svg" alt="Animated scene in three bands">
+<div><button type="button">Transform the File</button></div>
+<p><span>Transformation Type</span></p>
+<h3>The Output Is Never the Input</h3><h3>Nothing Rewritten, Nothing Written</h3>
+<div class="card"><h3>Catalogue card</h3><p>Cards on this page are catalogue cards: pale grey, faint ruled lines, headings author first in Caacupe One, text in Barlow. A card that records a finished run carries a postmark in its top corner. No other card does.</p></div>
+<section><h2><span class="num">1</span> The job</h2><p>The program transforms data into a form that looks similar at a glance yet is built differently underneath, so it cannot be read directly. A JSON structure can be turned into XML with its field names scrambled. Date values can be shifted into less predictable shapes. The tool belongs with programs that generate or mask sensitive data with values that look realistic while meaning nothing.</p></section>
+<section><h2><span class="num">2</span> Install, corrected</h2><p><code>git clone https://github.com/ShadowGuard-AI/dm-data-format-obfuscator</code></p><p>✓</p><p class="smallred">The README omits that hyphen.</p><p>The line above restores the hyphen in the organisation name. This site says so instead of quietly tidying the label away.</p></section>
+<section><h2><span class="num">3</span> How a call begins</h2><p><code>./dm-data-format-obfuscator [params]</code></p><p>Executable first. Brackets after. Nothing else is shown on this plate. No path on this plate belongs to a real file, and no value on it belongs to a real record.</p></section>
+<section><h2><span class="num">4</span> The controls, in README order</h2><p>Help first: <code>-h</code>, the flag that prints the help message and exits. Input next: <code>-i</code>, the path to the file that goes in. Output next: <code>-o</code>, the path to the file that comes out. Transformation type last: <code>-t</code>, with its two printed choices, json_to_xml and date_obfuscation.</p></section>
+<section><h2><span class="num">5</span> The refusal that guards the input</h2><p class="big">The output file may not be the input file. If the resolved output path lands on the input, by the same spelling or through a symlink, the run refuses at exit 1 before anything is written, and the input stays untouched.</p></section>
+<section><h2><span class="num">6</span> The date run and its count</h2><p>A date_obfuscation run counts the dates it truly rewrites. Dates are expected in the year month day order the README names with its percent sign format string, %Y-%m-%d. If no value in the input matches that form, the run prints the sentence the README quotes, No dates were found or rewritten., then exits 1, writes no output file, and never prints its completion line. No sample date is printed on this plate or anywhere on this site.</p></section>
+<section><h2><span class="num">7</span> Licence, two entries on one label</h2><div class="card"><p>Copyright (c) ShadowGuard-AI</p><p>Correction label: the README licence line spells the organisation without its hyphen. The line above restores the hyphen and this label records the change.</p></div><div class="card"><p>MIT License</p><p>Kept apart from the README line. Its holder is spoken of by shape alone: a pen name, then a parenthetical given name carried by one initial, then the account handle. The holder line is not copied here and the initial is not expanded.</p></div></section>
+<section><h2>The preserved README record</h2><pre>![Banner](banner.png)
 
-<main>
-  <section class="rail">
-    <nav aria-label="on this page">
-      <p class="mono"><a href="#run">Run it</a><br>
-      <a href="#files">The files</a><br>
-      <a href="#sheets">The sheets</a><br>
-      <a href="https://github.com/ShadowGuard-AI/dm-data-format-obfuscator">The repo</a></p>
-    </nav>
-    <div>
-      <p class="lede">Dm Data Format Obfuscator is one of my projects. The README in the repo is short, so this page sticks to what the files themselves show.</p>
-      <div class="grid">
-        <div class="card pop"><h3>What it is</h3>
-          <p>Dm Data Format Obfuscator: 5 files, 270 counted
-          lines across Python 250, Markdown 19, Text 1. One job, done in the
-          open, in files you can read.</p></div>
-        <div class="card pop"><h3>The biggest piece</h3>
-          <p><code>main.py</code> carries the most
-          lines. If the project grows, that file is where the growth
-          lands first, for better or worse.</p></div>
-        <div class="card pop"><h3>The honest gap</h3>
-          <p>No test files yet. That is the honest gap, and the roadmap in the visuals folder says what the first one should cover.</p></div>
-      </div>
-      <section id="run">
-        <h2>Run it</h2>
-        <p>The repo README has the exact commands for this one. The
-        shape is the shape for most of my projects: clone it, read the
-        top file first so you know what will happen, then run it on
-        something you do not mind breaking.</p>
-        <p class="mono">$ git clone https://github.com/ShadowGuard-AI/dm-data-format-obfuscator.git<br>$ cd dm-data-format-obfuscator</p>
-      </section>
-      
-  <section aria-label="real code">
-    <h2>The code, as it sits in the repo</h2>
-    <p>From <code>main.py</code>, line 16 on. I did
-    not tidy it for the page. What you see is what the file has.</p>
-    <pre class="code"><code>fake = Faker()
+# dm-data-format-obfuscator
+Transforms data into a visually similar but structurally different format to prevent direct interpretation. For example, converting JSON to XML with scrambled field names, or changing date formats unpredictably. - Focused on Tools designed to generate or mask sensitive data with realistic-looking but meaningless values
 
-class DataFormatObfuscator:
-    &quot;&quot;&quot;
-    Transforms data into a visually similar but structurally different format to prevent direct interpretation.
-    Supports JSON to XML and date format changes.
-    &quot;&quot;&quot;
+## Install
+`git clone https://github.com/ShadowGuardAI/dm-data-format-obfuscator`
 
-    def __init__(self, input_file, output_file, transformation_type):
-        &quot;&quot;&quot;
-        Initializes the DataFormatObfuscator.
+## Usage
+`./dm-data-format-obfuscator [params]`
 
-        Args:
-            input_file (str): Path to the input file.
-            output_file (str): Path to the output file.
-            transformation_type (str): Type of transformation to apply (e.g., &#x27;json_to_xml&#x27;, &#x27;date_obfuscation&#x27;).
-        &quot;&quot;&quot;
-        self.input_file = input_file
-        self.output_file = output_file
-        self.transformation_type = transformation_type
+## Parameters
+- `-h`: Show help message and exit
+- `-i`: Path to the input file.
+- `-o`: Path to the output file.
+- `-t`: Type of transformation to apply (json_to_xml, date_obfuscation).
 
-    def load_data(self):</code></pre>
-  </section>
-      <section id="files">
-        <h2>The files that matter</h2>
-        <table><tr><th>File</th><th>Lines</th></tr>
-        <tr><td><code>main.py</code></td><td>250</td></tr>
-        <tr><td><code>README.md</code></td><td>19</td></tr>
-        <tr><td><code>requirements.txt</code></td><td>1</td></tr>
-        <tr><td><code>banner.png</code></td><td>0</td></tr>
-        <tr><td><code>logo.png</code></td><td>0</td></tr>
-        </table>
-        <p>Names doing the work: <span class="mono">DataFormatObfuscator, setup_argparse, main, __init__, load_data, transform_json_to_xml, _json_to_xml_recursive, _prettify_xml</span>.</p>
-      </section>
-      <section id="sheets">
-        <h2>Drawn by hand</h2>
-        <p>I sketch my projects on notebook paper so I have to
-        understand them well enough to draw them. The full set,
-        with the counts and how they were counted, is the
-        <a href="https://github.com/ShadowGuard-AI/dm-data-format-obfuscator/tree/main/dm-data-format-obfuscator-Visuals">dm-data-format-obfuscator-Visuals</a>
-        folder in the repo. Nothing is drawn over the binder holes.
-        That is a rule, not a style.</p>
-        <div class="shots">
-          <img src="assets/architecture.png" alt="Hand drawn architecture sheet for Dm Data Format Obfuscator">
-          <img src="assets/flowchart.png" alt="Hand drawn flowchart sheet for Dm Data Format Obfuscator">
-          <img src="assets/product-map.png" alt="Hand drawn product map sheet for Dm Data Format Obfuscator">
-        </div>
-      </section>
-    </div>
-  </section>
-</main>
-<footer>
-  <p>Dm Data Format Obfuscator is one of my projects. This page was written
-  from the repo itself on 2026-10-30: the counts are the
-  repo's counts, the code is the repo's code, and the gaps are the
-  repo's gaps.</p>
-</footer>
-</body>
-</html>
+## Behavior notes
+- The output file may not be the input file. If the resolved output path is the input file, by the same spelling or through a symlink, the run refuses at exit 1 before anything is written and the input is left untouched.
+- A date_obfuscation run counts the dates it actually rewrites. If no value in the input is a date in the expected %Y-%m-%d form, the run prints "No dates were found or rewritten.", exits 1, writes no output file, and does not print the completion line.
+
+## License
+Copyright (c) ShadowGuardAI</pre></section>
+</main></body></html>
