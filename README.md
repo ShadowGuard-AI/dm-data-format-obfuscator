@@ -18,14 +18,14 @@ Transforms data into a visually similar but structurally different format to pre
 ![Major separator](sep-heavy.svg)
 
 ## Install
-`git clone https://github.com/ShadowGuardAI/dm-data-format-obfuscator`
+`git clone https://github.com/ShadowGuard-AI/dm-data-format-obfuscator`
 
 > Loan slip: the install line in this README spells the organisation without its hyphen. The slip records the spelling as printed. The website corrects it and labels the correction.
 
 ![Minor separator](sep-light.svg)
 
 ## Usage
-`./dm-data-format-obfuscator [params]`
+`python3 main.py [options]`
 
 ![Minor separator](sep-light.svg)
 
@@ -50,7 +50,7 @@ Transforms data into a visually similar but structurally different format to pre
 ![Minor separator](sep-light.svg)
 
 ## License
-Copyright (c) ShadowGuardAI
+This project is released under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ![Major separator](sep-heavy.svg)
 
